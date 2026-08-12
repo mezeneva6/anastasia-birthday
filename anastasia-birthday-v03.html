@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Анастасия — 22.08</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#090909;color:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{max-width:620px;margin:auto;padding:22px 16px 50px}.noise{position:fixed;inset:0;pointer-events:none;opacity:.06;background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 4px)}
+.card{background:#111;border:1px solid #333;border-radius:22px;padding:24px;margin-top:18px;box-shadow:0 15px 50px #000}
+h1{font-size:clamp(44px,13vw,78px);line-height:.9;margin:12px 0}.red{color:#ff3158}.muted{color:#999}.tag{display:inline-block;border:1px solid #ff3158;border-radius:999px;padding:7px 11px;font-size:12px;letter-spacing:1px}
+button{width:100%;border:0;border-radius:15px;padding:16px;margin-top:12px;background:#ff3158;color:white;font-weight:800;font-size:17px;cursor:pointer}
+button.alt{background:#222;border:1px solid #444}.danger{background:#7d1027}
+.screen{display:none}.screen.active{display:block;animation:in .35s ease}@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.warning{border:1px solid #ff3158;background:#190b0f;border-radius:16px;padding:16px;margin:18px 0}
+.q{font-size:22px;font-weight:800}.opt{background:#191919;border:1px solid #3b3b3b;text-align:left}.opt:hover{border-color:#ff3158}
+.progress{height:5px;background:#292929;border-radius:5px;overflow:hidden;margin:15px 0}.bar{height:100%;background:#ff3158;width:0;transition:.3s}
+.secret{color:#ff3158;font-family:monospace;text-align:center;margin-top:20px;min-height:24px}
+.big{font-size:60px;text-align:center}.center{text-align:center}
+input,textarea{width:100%;background:#0b0b0b;color:#fff;border:1px solid #444;border-radius:12px;padding:14px;font-size:16px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="noise"></div><main class="wrap">
+
+<section id="s0" class="screen active">
+<div class="tag">18+ • НЕОФИЦИАЛЬНОЕ ПРИГЛАШЕНИЕ</div>
+<h1>Анастасия<br><span class="red">22.08</span></h1>
+<div class="card">
+<p class="muted">Ты получил(а) приглашение. Почему? Хороший вопрос. Кто-то явно потерял контроль.</p>
+<div class="warning"><b>⚠️ ВНИМАНИЕ</b><br>На мероприятии возможны: громкая музыка, тупые шутки, мат, внезапные решения и последствия, о которых утром лучше не спрашивать.</div>
+<p>📍 Новошахтинск<br>ул. 40 лет Советской Армии</p>
+<button onclick="go(1)">Я достаточно взрослый(ая), чтобы нажать</button>
+<button class="alt" onclick="alert('Поздно. Ты уже здесь.')">Я передумал(а)</button>
+</div>
+<div id="secret" class="secret"></div>
+</section>
+
+<section id="s1" class="screen">
+<div class="tag">ПРОТОКОЛ ПРОПУСКА</div><h2>Перед входом — мини-допрос</h2>
+<p class="muted">Всего 6 вопросов. Отвечай честно. Хотя кому мы тут врём.</p>
+<div class="card"><div class="progress"><div id="bar" class="bar"></div></div><div id="question"></div></div>
+</section>
+
+<section id="s2" class="screen">
+<div class="tag">РЕЗУЛЬТАТ</div><h1>Ну всё.<br><span class="red">Ты в деле.</span></h1>
+<div class="card center">
+<div class="big">🍾💀🎂</div>
+<p id="result"></p>
+<button onclick="go(3)">Официально подтвердить</button>
+</div>
+</section>
+
+<section id="s3" class="screen">
+<div class="tag">ФИНАЛЬНАЯ ПРОВЕРКА</div><h2>Оставь свои данные</h2>
+<p class="muted">Это не бюрократия. Это чтобы понять, кого ждать и сколько стульев не хватит.</p>
+<div class="card">
+<label>Как тебя зовут?</label><input id="name" placeholder="Имя / кличка">
+<label>Придёшь?</label>
+<button class="opt" onclick="answer('Да, конечно')">ДА, Я БУДУ 🔥</button>
+<button class="opt" onclick="answer('Постараюсь')">ПОСТАРАЮСЬ, БЛЯТЬ</button>
+<button class="opt" onclick="answer('Нет')">НЕТ 😭</button>
+<p id="final" class="center"></p>
+</div>
+</section>
+
+</main>
+<script>
+const qs=[
+["Главный вопрос: ты умеешь веселиться? ",["Да","Я профессионал","Я пришёл учиться"]],
+["Если после полуночи станет стыдно — что делаем?",["Продолжаем","Делаем вид, что ничего не было","Снимаем это на видео"]],
+["Кто отвечает за музыку?",["Я","Кто-нибудь с колонкой","Господь Бог"]],
+["Если Анастасия скажет «последний тост»?",["Верю","Не верю","Уже поздно"]],
+["Сколько нужно выпить, чтобы начать танцевать?",["0","По ситуации","Сколько нальют"]],
+["Готов(а) к последствиям?",["Да","А выбора нет?","ПОЕХАЛИ"]]
+];
+let qi=0,answers=[];
+function go(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById('s'+n).classList.add('active');if(n===1)showQ()}
+function showQ(){let q=qs[qi];document.getElementById('bar').style.width=(qi/qs.length*100)+'%';document.getElementById('question').innerHTML='<div class="q">'+q[0]+'</div>'+q[1].map((x,i)=>`<button class="opt" onclick="pick('${x.replaceAll("'","")}')">${x}</button>`).join('')}
+function pick(x){answers.push(x);qi++;if(qi<qs.length)showQ();else{document.getElementById('result').innerHTML='Анализ завершён. Уровень адекватности: <b>подозрительно низкий</b>.<br><br>Дата: <b>22 августа</b><br>Место: <b>Новошахтинск, ул. 40 лет Советской Армии</b>';go(2)}}
+function answer(x){let n=document.getElementById('name').value.trim()||'Таинственный гость';document.getElementById('final').innerHTML=`<b>${n}</b>, ответ записан: <span class="red">${x}</span>.<br><br>Теперь главное — не потеряй приглашение и приходи 22.08 😈`}
+let taps=0;document.querySelector('h1').addEventListener('click',()=>{taps++;if(taps>=5)document.getElementById('secret').textContent='🥚 ПАСХАЛКА: ты нашёл(ла) секретный вход. Но он никуда не ведёт. Конечно же.'});
+</script>
+</body></html>

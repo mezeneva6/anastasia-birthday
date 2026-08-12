@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Анастасия 22.08 — TEST v0.2</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#090909;color:#f5f5f5;font-family:Arial,sans-serif}
+body{background:radial-gradient(circle at 50% 0,#3a0d18 0,#090909 45%);overflow-x:hidden}
+.app{max-width:700px;margin:auto;min-height:100vh;padding:24px 18px;display:flex;align-items:center}
+.screen{display:none;width:100%;animation:show .25s ease}.screen.active{display:block}
+@keyframes show{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.badge{display:inline-block;border:1px solid #ff1744;color:#ff1744;padding:7px 9px;font-size:11px;font-weight:900;letter-spacing:2px}
+h1{font-size:clamp(50px,15vw,100px);line-height:.82;letter-spacing:-5px;margin:20px 0 8px}
+h2{font-size:clamp(32px,9vw,58px);line-height:.9;letter-spacing:-2px;margin:18px 0 25px}
+p{line-height:1.5;color:#ccc}.warning{border-left:4px solid #ff1744;background:#160a0d;padding:16px;margin:22px 0}
+button{display:block;width:100%;border:0;padding:17px;margin:9px 0;font-weight:900;font-size:16px;cursor:pointer}
+.danger{background:#ff1744;color:white}.green{background:#b6ff00;color:#050505}.alt{background:transparent;color:white;border:1px solid #444}.option{background:#151515;color:white;border:1px solid #333;text-align:left}
+.option:active,button:active{transform:scale(.98)}
+.status{font:13px monospace;line-height:1.8;color:#b6ff00;background:#050505;border:1px solid #222;padding:14px}
+.question{background:#111;border:1px solid #292929;padding:18px;margin:15px 0}
+.question h3{font-size:20px;margin:0 0 15px}
+.progress{height:5px;background:#252525;margin:18px 0}.bar{height:100%;background:#ff1744;width:0;transition:.3s}
+textarea{width:100%;min-height:100px;background:#080808;color:white;border:1px solid #444;padding:13px;font:inherit}
+.small{font-size:12px;color:#777}.center{text-align:center}
+.secret{margin-top:28px;color:#333;font-size:10px;cursor:pointer;text-align:center;min-height:20px}
+.score{font-size:62px;font-weight:1000;color:#ff1744}
+#toast{position:fixed;z-index:99;left:50%;bottom:20px;transform:translate(-50%,120px);background:#f5f5f5;color:#080808;padding:14px 16px;font-weight:900;max-width:90%;transition:.25s;text-align:center}
+#toast.show{transform:translate(-50%,0)}
+.glitch{text-shadow:2px 0 #ff1744,-2px 0 #b6ff00}
+footer{text-align:center;color:#555;font-size:11px;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section id="s1" class="screen active">
+<span class="badge">⚠ 18+ / WARNING</span>
+<h1 class="glitch">АНАСТАСИЯ</h1><h2>22 АВГУСТА</h2>
+<div class="warning"><b>ПЕРСОНАЛЬНОЕ ПРИГЛАШЕНИЕ</b><br><br>
+Этот сайт содержит алкоголь, сомнительные решения и последствия, которые невозможно отменить.</div>
+<button class="danger" id="enterBtn">Я СОГЛАСЕН(А) С РИСКАМИ</button>
+<button class="alt" id="under18Btn">Мне ещё нет 18</button>
+<div class="secret" id="secret1">не нажимать</div>
+</section>
+
+<section id="s2" class="screen">
+<span class="badge">SYSTEM CHECK</span><h2>Перед входом</h2>
+<div class="status">
+Проверка адекватности... FAILED<br>
+Чувство юмора... REQUIRED<br>
+Способность остановиться после первой... FAILED<br>
+Желание попасть на день рождения... ОБНАРУЖЕНО
+</div>
+<div class="warning">Ты точно понимаешь, куда идёшь?</div>
+<button class="green" id="startBtn">ДА. ПУСКАЙ БУДЕТ БЕЗУМИЕ</button>
+<button class="alt" id="backBtn">Я передумал(а)</button>
+</section>
+
+<section id="s3" class="screen">
+<span class="badge">АНКЕТА / <span id="qnum">01</span></span>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div class="question">
+<h3 id="qtitle"></h3><div id="answers"></div>
+</div>
+<div id="hint" class="small center">Отвечай честно. Система всё равно тебе не поверит.</div>
+<div id="secretBtn" class="secret">не нажимать</div>
+</section>
+
+<section id="s4" class="screen">
+<span class="badge">ANALYSIS COMPLETE</span><h2>Результаты проверки</h2>
+<div class="question center"><div class="small">УРОВЕНЬ ПОДОЗРИТЕЛЬНОСТИ</div>
+<div id="score" class="score">0/100</div><p id="verdict"></p></div>
+<div class="warning"><span style="color:#ff1744;font-weight:900">ВНИМАНИЕ:</span><br>
+Твои ответы сохранены в сверхсекретной папке «Потом разберёмся».</div>
+<button class="green" id="accessBtn">ПОЛУЧИТЬ ДОПУСК</button>
+</section>
+
+<section id="s5" class="screen">
+<span class="badge">ACCESS GRANTED</span><h2 id="finalTitle">ТЫ В СПИСКЕ. 🫡</h2>
+<p id="finalText"></p>
+<div class="warning"><b>📍 МЕСТО</b><br>Новошахтинск<br>ул. 40 лет Советской Армии<br><br>
+<b>📅 22 АВГУСТА</b></div>
+<button class="danger" id="partyBtn">Я ПОНЯЛ(А). ДО ВСТРЕЧИ.</button>
+<footer>Ответственность за последствия после 22:00 администрация сайта не несёт.</footer>
+</section>
+
+<section id="secretScreen" class="screen">
+<span class="badge">🔓 SECRET ACCESS</span>
+<h2>ТЫ СЛОМАЛ(А) СИСТЕМУ</h2>
+<div class="warning"><b>ЕБАТЬ.</b><br><br>
+Ты реально нажал(а) эту кнопку пять раз.<br><br>
+Награда за это абсолютно бесполезна, но теперь ты знаешь слишком много.</div>
+<button class="danger" id="returnSecret">ВЕРНУТЬСЯ К АНКЕТЕ</button>
+</section>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var screens=document.querySelectorAll(".screen"), q=0, score=0, taps=0, data={};
+
+function show(id){
+  screens.forEach(function(s){s.classList.remove("active")});
+  var el=document.getElementById(id); if(el) el.classList.add("active");
+}
+function toast(t){
+  var x=document.getElementById("toast"); xtext(t); x.classList.add("show");
+  clearTimeout(window._toastTimer); window._toastTimer=setTimeout(function(){x.classList.remove("show")},2400);
+}
+function xtext(t){document.getElementById("toast").textContent=t}
+function answer(text,key,points){
+  data[key]=text; score+=points;
+  var reactions={
+    "Я уже там":"КАК ТЫ УЖЕ ТАМ?!",
+    "Культурно посидеть":"Сильное начало. Очень подозрительно.",
+    "Утром расскажите":"Вот теперь мы говорим на одном языке.",
+    "До 23:00":"🤡 Система обнаружила ложь.",
+    "Не планирую":"Уважение.",
+    "Какая ещё койка?":"Уверенность уровня: Бог.",
+    "Скорее всего":"«Скорее всего» — знаменитый предшественник «бля, я забыл»."
+  };
+  if(reactions[text]) toast(reactions[text]);
+  setTimeout(function(){q++; renderQuestion()},350);
+}
+var qs=[
+ {title:"Ты придёшь?",key:"come",opts:[["Да, блять", "Да, конечно",3],["Скорее всего","Скорее всего",2],["Я пока не знаю","Пока не знаю",1],["Я уже там","Я уже там",6]]},
+ {title:"Какой план на вечер?",key:"plan",opts:[["Культурно посидеть","Культурно посидеть",1],["Немного выпить","Немного выпить",2],["Хорошо выпить","Хорошо выпить",4],["Утром расскажите","Утром расскажите",7]]},
+ {title:"Во сколько ты собираешься уйти?",key:"leave",opts:[["До 23:00","До 23:00",0],["До 01:00","До 01:00",2],["Пока не выгонят","Пока не выгонят",5],["Не планирую уходить","Не планирую",7]]},
+ {title:"Нужен ночлег?",key:"bed",opts:[["Да","Да",3],["Нет","Нет",0],["Какая ещё койка? 😏","Какая ещё койка?",6]]},
+ {title:"Что предпочитаешь из еды?",key:"food",opts:[["🥩 Мясо","Мясо",2],["🧀 Закуски","Закуски",1],["🍰 Сладкое","Сладкое",1],["Мне всё равно","Мне всё равно",3]]},
+ {title:"Есть ограничения по еде?",key:"limits",text:true},
+ {title:"Чего ты ожидаешь от этой вечеринки?",key:"expect",text:true}
+];
+function renderQuestion(){
+  if(q>=qs.length){finish();return}
+  var item=qs[q], ans=document.getElementById("answers");
+  document.getElementById("qnum").textContent=("0"+(q+1)).slice(-2);
+  document.getElementById("bar").style.width=((q+1)/qs.length*100)+"%";
+  document.getElementById("qtitle").textContent=item.title;
+  ans.innerHTML="";
+  if(item.text){
+    var ta=document.createElement("textarea");
+    ta.id="freeAnswer"; ta.placeholder=q===5?"Если нет — напиши «нет».":"Мы никому не покажем. Наверное.";
+    ans.appendChild(ta);
+    var b=document.createElement("button"); b.className="danger"; b.textContent="ПРОДОЛЖИТЬ";
+    b.onclick=function(){data[item.key]=ta.value.trim()||"нет"; if(ta.value.trim())score+=2; q++; renderQuestion()};
+    ans.appendChild(b);
+  }else{
+    item.opts.forEach(function(o){
+      var b=document.createElement("button"); b.className="option"; b.textContent=o[0];
+      b.onclick=function(){answer(o[1],item.key,o[2])}; ans.appendChild(b);
+    });
+  }
+}
+function finish(){
+  var final=Math.min(100,score*7+Math.floor(Math.random()*8));
+  document.getElementById("score").textContent=final+"/100";
+  document.getElementById("verdict").textContent=
+    final<25?"Слишком прилично. Это вызывает подозрения.":
+    final<55?"Нормальный уровень. Шансы пережить вечер есть.":
+    final<80?"Опасный человек. Именно таких мы и ждали.":
+    "ПИЗДЕЦ. Мы нашли главного героя этой вечеринки.";
+  var title="ТЫ В СПИСКЕ. 🫡", text="22 августа. Новошахтинск. Анастасия ждёт. Береги себя. Особенно после полуночи.";
+  if(data.come==="Пока не знаю"){title="МЫ ТЕБЯ ВСЁ РАВНО ЖДЁМ 😈";text="Решишься — приезжай. Мы сделаем вид, что так и было задумано."}
+  if(data.come==="Скорее всего"){title="СКОРЕЕ ВСЕГО, ТЫ В СПИСКЕ";text="Постарайся не превратить «скорее всего» в «бля, я забыл»."}
+  if(data.come==="Я уже там"){title="ТЫ УЖЕ ТАМ?!";text="Окей. Это уже пугает. Проверь, точно ли ты не перепутал адрес."}
+  document.getElementById("finalTitle").textContent=title;
+  document.getElementById("finalText").textContent=text;
+  show("s4");
+}
+document.getElementById("enterBtn").onclick=function(){show("s2")};
+document.getElementById("under18Btn").onclick=function(){toast("Иди отсюда. Здесь взрослые принимают сомнительные решения. 😈")};
+document.getElementById("startBtn").onclick=function(){q=0;score=0;show("s3");renderQuestion()};
+document.getElementById("backBtn").onclick=function(){toast("Поздно. Ты уже согласился(а).")};
+document.getElementById("accessBtn").onclick=function(){show("s5")};
+document.getElementById("partyBtn").onclick=function(){toast("Доступ подтверждён. Увидимся 22.08 🔥")};
+document.getElementById("secretBtn").onclick=function(){
+  taps++;
+  var m=["Я же сказал(а): НЕ НАЖИМАТЬ.","Ты специально?","Ладно.","...","ЕБАТЬ. ТЫ РЕАЛЬНО ДОШЁЛ(ЛА) ДО ПЯТИ."];
+  toast(m[Math.min(taps-1,4)]);
+  if(taps>=5){show("secretScreen")}
+};
+document.getElementById("returnSecret").onclick=function(){show("s3")};
+})();
+</script>
+</body>
+</html>
